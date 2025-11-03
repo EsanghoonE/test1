@@ -5,7 +5,7 @@ const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 const appRoot = document.querySelector('#app')
 appRoot.innerHTML = `
   <div class="chat-root">
-    <header class="chat-header">차 추천 챗봇</header>
+    <header class="chat-header">상훈이의 자동차 추천챗봇</header>
     <main id="messages" class="chat-messages" aria-live="polite"></main>
     <form id="chat-form" class="chat-input" autocomplete="off">
       <input id="user-input" name="message" type="text" placeholder="예: 3천만원대, 가족용 SUV 추천해줘" required />
