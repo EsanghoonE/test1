@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 80">
   <defs>
     <style>
-      .oval{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6}
-      .h{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6;stroke-linecap:round}
+      .oval{fill:none;stroke:#1b1e28;stroke-opacity:.4;stroke-width:6}
+      .h{fill:none;stroke:#1b1e28;stroke-opacity:.4;stroke-width:6;stroke-linecap:round}
     </style>
   </defs>
   <ellipse cx="70" cy="40" rx="60" ry="28" class="oval"/>

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 60">
   <defs>
     <style>
-      .stroke{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6;stroke-linecap:round}
+      .stroke{fill:none;stroke:#1b1e28;stroke-opacity:.4;stroke-width:6;stroke-linecap:round}
     </style>
   </defs>
   <path d="M10 50 L40 10" class="stroke"/>

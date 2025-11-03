@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
     <style>
-      .ring{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6}
-      .star{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6;stroke-linecap:round}
-      .t{font:700 20px 'Inter', sans-serif; fill:#1b1e28; fill-opacity:.25}
+      .ring{fill:none;stroke:#1b1e28;stroke-opacity:.4;stroke-width:6}
+      .star{fill:none;stroke:#1b1e28;stroke-opacity:.4;stroke-width:6;stroke-linecap:round}
+      .t{font:700 20px 'Inter', sans-serif; fill:#1b1e28; fill-opacity:.4}
     </style>
   </defs>
   <circle cx="60" cy="60" r="52" class="ring"/>

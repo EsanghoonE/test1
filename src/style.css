@@ -27,23 +27,21 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.07;
+  opacity: 0.12;
   background-image:
     url('/brands/bmw.svg'),
     url('/brands/benz.svg'),
     url('/brands/audi.svg'),
     url('/brands/hyundai.svg'),
-    url('/brands/kia.svg'),
-    url('/brands/tesla.svg');
+    url('/brands/kia.svg');
   background-repeat: repeat;
-  background-size: 140px auto, 160px auto, 120px auto, 140px auto, 120px auto, 140px auto;
+  background-size: 180px auto, 200px auto, 160px auto, 180px auto, 160px auto;
   background-position:
     0 0,
-    80px 120px,
-    160px 240px,
-    240px 60px,
-    320px 180px,
-    400px 20px;
+    120px 160px,
+    240px 320px,
+    360px 100px,
+    480px 240px;
   mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), rgba(0,0,0,0.5) 50%, transparent 90%);
 }
 
