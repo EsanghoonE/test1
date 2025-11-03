@@ -1,11 +1,11 @@
 :root {
-  --bg: #101114;
-  --panel: #17181c;
-  --border: #2a2b31;
-  --text: #e6e6e6;
-  --muted: #9aa0aa;
-  --accent: #5b8cff;
-  color-scheme: dark;
+  --bg: #f7f8fb;
+  --panel: #ffffff;
+  --border: #e6e8ef;
+  --text: #1b1e28;
+  --muted: #6b7280;
+  --accent: #2f6df6;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -15,10 +15,37 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Noto Sans KR', 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  position: relative;
 }
 
 #app { height: 100vh; display: grid; place-items: center; }
+
+/* Background brand logo collage */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image:
+    url('/brands/bmw.svg'),
+    url('/brands/benz.svg'),
+    url('/brands/audi.svg'),
+    url('/brands/hyundai.svg'),
+    url('/brands/kia.svg'),
+    url('/brands/tesla.svg');
+  background-repeat: repeat;
+  background-size: 140px auto, 160px auto, 120px auto, 140px auto, 120px auto, 140px auto;
+  background-position:
+    0 0,
+    80px 120px,
+    160px 240px,
+    240px 60px,
+    320px 180px,
+    400px 20px;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), rgba(0,0,0,0.5) 50%, transparent 90%);
+}
 
 .chat-root {
   width: min(880px, 100%);
@@ -29,12 +56,14 @@ body {
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 .chat-header {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
   font-weight: 600;
+  background: linear-gradient(180deg, #fbfdff, #f5f8ff);
 }
 
 .chat-messages {
@@ -52,8 +81,8 @@ body {
   white-space: pre-wrap;
   line-height: 1.45;
 }
-.msg-user .bubble { background: #2442ff33; border: 1px solid #2442ff55; }
-.msg-bot .bubble { background: #0f1116; border: 1px solid var(--border); }
+.msg-user .bubble { background: #eaf0ff; border: 1px solid #cddaff; }
+.msg-bot .bubble { background: #f6f7fa; border: 1px solid var(--border); }
 
 .chat-input {
   display: grid;
@@ -67,8 +96,9 @@ body {
   padding: 0 12px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: #0f1116;
+  background: #ffffff;
   color: var(--text);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02) inset;
 }
 .chat-input button {
   height: 44px;
@@ -79,6 +109,7 @@ body {
   color: white;
   font-weight: 600;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(47, 109, 246, 0.25);
 }
 .chat-input button:disabled { opacity: 0.6; cursor: not-allowed; }
 

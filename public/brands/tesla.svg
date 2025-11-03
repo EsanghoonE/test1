@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140">
+  <defs>
+    <style>
+      .t{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6;stroke-linecap:round}
+    </style>
+  </defs>
+  <path d="M10 20 C60 -10, 60 -10, 110 20" class="t"/>
+  <path d="M60 20 L60 120" class="t"/>
+  <path d="M42 38 L60 20 L78 38" class="t"/>
+</svg>
+

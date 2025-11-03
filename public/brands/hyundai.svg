@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 80">
+  <defs>
+    <style>
+      .oval{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6}
+      .h{fill:none;stroke:#1b1e28;stroke-opacity:.25;stroke-width:6;stroke-linecap:round}
+    </style>
+  </defs>
+  <ellipse cx="70" cy="40" rx="60" ry="28" class="oval"/>
+  <path d="M35 40h70" class="h"/>
+  <path d="M58 24l-12 32" class="h"/>
+  <path d="M82 24l12 32" class="h"/>
+</svg>
+
