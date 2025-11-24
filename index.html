@@ -1,15 +1,843 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="ko">
+
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <title>자동차 설문 조사 - 미래 모빌리티</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>자동차 산업 역사 퀴즈 - AI 기반 수업 도우미</title>
+
+    <!-- Tailwind CSS CDN -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    
+
+    <!-- Game Boy 스타일 CSS -->
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        
+
+        /* 1. Game Boy 본체 배경 및 일반 텍스트 색상 */
+
+        body {
+
+            font-family: 'Press Start 2P', monospace; /* 레트로 픽셀 폰트 (폴백: monospace) */
+
+            background-color: #D3D3D3; /* 밝은 회색 (본체 플라스틱) */
+
+            color: #222222; /* 진한 회색 텍스트 */
+
+            transition: background-color 0.3s, color 0.3s;
+
+        }
+
+        /* 2. Game Boy 화면 색상 (녹색/검은색 4단계 톤 중 2가지 사용) */
+
+        .gameboy-screen-bg {
+
+            background-color: #9BBC0F; /* 밝은 녹색/노란색 화면 */
+
+            color: #0F380F; /* 진한 녹색 픽셀 색상 */
+
+        }
+
+        .gameboy-screen-border {
+
+            border-color: #0F380F;
+
+        }
+
+        /* 3. 버튼 3D 섀도우를 Game Boy 느낌에 맞게 조정 */
+
+        .gameboy-button-shadow-red {
+
+            box-shadow: 0 4px 0 0 #800000; /* 어두운 빨간색 그림자 */
+
+        }
+
+        .gameboy-button-shadow-gray {
+
+            box-shadow: 0 4px 0 0 #333333; /* 어두운 회색 그림자 */
+
+        }
+
+    </style>
+
   </head>
+
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+
+<!-- 메인 애플리케이션 컨테이너 (레트로 콘솔 본체 프레임) -->
+
+<div id="app" class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-lg bg-[#D3D3D3] rounded-xl p-8 md:p-12 
+
+                border-8 border-[#333333] 
+
+                shadow-2xl shadow-[#333333]/50"> <!-- 깊은 그림자 -->
+
+        <h1 class="text-xl md:text-2xl font-bold text-center text-[#222222] mb-4 tracking-tighter">
+
+            자동차 산업 역사 퀴즈
+
+        </h1>
+
+        <p class="text-center text-xs mb-6 text-[#555555]">
+
+            주제를 입력하고 AI가 생성한 퀴즈로 재미있게 수업을 진행하세요!
+
+        </p>
+
+        <!-- 퀴즈 생성 영역 -->
+
+        <div id="quiz-generation-area" class="space-y-4">
+
+            <!-- 입력창 (Game Boy 화면 스타일) -->
+
+            <input type="text" id="topic-input" placeholder="예: 포드 모델 T의 영향"
+
+                   class="w-full p-3 rounded-sm gameboy-screen-bg text-[#0F380F] placeholder-[#0F380F]/70 
+
+                          focus:outline-none focus:ring-0 border-2 gameboy-screen-border transition duration-150 text-sm">
+
+            
+
+            <!-- 퀴즈 생성 버튼 (Game Boy A/B 버튼 스타일) -->
+
+            <button id="generate-button"
+
+                    class="w-full py-3 px-6 bg-[#CC0000] hover:bg-[#A00000] text-white font-bold rounded-lg 
+
+                           gameboy-button-shadow-red transition duration-100 transform 
+
+                           active:translate-y-1 active:shadow-none text-sm"> 
+
+                퀴즈 생성 (START)
+
+            </button>
+
+            <div id="status-message" class="text-center text-xs h-5 text-red-600"></div>
+
+        </div>
+
+        <!-- 퀴즈 플레이 영역 (초기에는 숨김) -->
+
+        <div id="quiz-game-area" class="hidden mt-8 space-y-6">
+
+            <div class="flex justify-between items-center text-sm font-bold text-[#222222]">
+
+                <span id="score-display">점수: 0</span>
+
+                <span id="question-count">문제: 0 / 0</span>
+
+            </div>
+
+            <!-- 현재 문제 카드 (Game Boy 화면) -->
+
+            <div id="question-card" class="gameboy-screen-bg p-4 rounded-sm shadow-inner border-2 gameboy-screen-border">
+
+                <p id="current-question" class="text-sm font-semibold mb-2 text-[#0F380F] leading-relaxed">문제 준비 중...</p>
+
+            </div>
+
+            <!-- 답변 버튼들 (다크 그레이 버튼 스타일) -->
+
+            <div id="options-container" class="space-y-3">
+
+                <!-- 답변 버튼이 여기에 동적으로 추가됩니다. -->
+
+            </div>
+
+            <!-- 피드백 메시지 박스 -->
+
+            <div id="feedback-message" class="p-3 rounded-sm text-center text-xs font-bold transition duration-300 hidden text-white"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    // Firebase 관련 전역 변수 (Firestore를 사용하지 않으므로 사용하지 않음)
+
+    // const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+    // const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+
+    // const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
+
+    
+
+    // Gemini API 설정
+
+    const API_MODEL = 'gemini-2.5-flash-preview-09-2025';
+
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=`; // API Key는 환경에서 자동 주입됨
+
+    // TTS API 설정
+
+    const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
+
+    const TTS_URL = `https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=`; // API Key는 환경에서 자동 주입됨
+
+    // DOM 요소 캐시
+
+    const topicInput = document.getElementById('topic-input');
+
+    const generateButton = document.getElementById('generate-button');
+
+    const statusMessage = document.getElementById('status-message');
+
+    const quizGenerationArea = document.getElementById('quiz-generation-area');
+
+    const quizGameArea = document.getElementById('quiz-game-area');
+
+    const scoreDisplay = document.getElementById('score-display');
+
+    const questionCountDisplay = document.getElementById('question-count');
+
+    const currentQuestionEl = document.getElementById('current-question');
+
+    const optionsContainer = document.getElementById('options-container');
+
+    const feedbackMessage = document.getElementById('feedback-message');
+
+    // 게임 상태 변수
+
+    let currentQuiz = [];
+
+    let currentQuestionIndex = 0;
+
+    let score = 0;
+
+    let isProcessing = false;
+
+    // TTS (Text-to-Speech) 관련 유틸리티 함수
+
+    // Signed 16-bit PCM 데이터를 WAV 파일 형식으로 변환합니다.
+
+    function pcmToWav(pcm16, sampleRate) {
+
+        const numChannels = 1;
+
+        const bitsPerSample = 16;
+
+        const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+
+        const blockAlign = numChannels * (bitsPerSample / 8);
+
+        const dataLength = pcm16.byteLength;
+
+        const totalLength = 44 + dataLength;
+
+        const buffer = new ArrayBuffer(totalLength);
+
+        const view = new DataView(buffer);
+
+        let offset = 0;
+
+        // RIFF chunk
+
+        view.setUint32(offset, 0x52494646, false); offset += 4; // "RIFF"
+
+        view.setUint32(offset, totalLength - 8, true); offset += 4; // ChunkSize
+
+        view.setUint32(offset, 0x57415645, false); offset += 4; // "WAVE"
+
+        // fmt chunk
+
+        view.setUint32(offset, 0x666d7420, false); offset += 4; // "fmt "
+
+        view.setUint32(offset, 16, true); offset += 4; // Subchunk1Size (16 for PCM)
+
+        view.setUint16(offset, 1, true); offset += 2; // AudioFormat (1 for PCM)
+
+        view.setUint16(offset, numChannels, true); offset += 2; // NumChannels
+
+        view.setUint32(offset, sampleRate, true); offset += 4; // SampleRate
+
+        view.setUint32(offset, byteRate, true); offset += 4; // ByteRate
+
+        view.setUint16(offset, blockAlign, true); offset += 2; // BlockAlign
+
+        view.setUint16(offset, bitsPerSample, true); offset += 2; // BitsPerSample
+
+        // data chunk
+
+        view.setUint32(offset, 0x64617461, false); offset += 4; // "data"
+
+        view.setUint32(offset, dataLength, true); offset += 4; // Subchunk2Size
+
+        // PCM data
+
+        const dataArray = new Uint8Array(buffer, offset);
+
+        dataArray.set(new Uint8Array(pcm16.buffer));
+
+        return new Blob([buffer], { type: 'audio/wav' });
+
+    }
+
+    // Base64 문자열을 ArrayBuffer로 디코딩
+
+    function base64ToArrayBuffer(base64) {
+
+        const binaryString = atob(base64);
+
+        const len = binaryString.length;
+
+        const bytes = new Uint8Array(len);
+
+        for (let i = 0; i < len; i++) {
+
+            bytes[i] = binaryString.charCodeAt(i);
+
+        }
+
+        return bytes.buffer;
+
+    }
+
+    
+
+    // TTS를 사용하여 텍스트를 음성으로 재생하는 함수 (Kore 목소리 사용)
+
+    async function speak(text, voiceName = "Kore") {
+
+        if (!text) return;
+
+        const payload = {
+
+            contents: [{ parts: [{ text: text }] }],
+
+            generationConfig: {
+
+                responseModalities: ["AUDIO"],
+
+                speechConfig: {
+
+                    voiceConfig: {
+
+                        prebuiltVoiceConfig: { voiceName: voiceName }
+
+                    }
+
+                }
+
+            },
+
+        };
+
+        const maxRetries = 3;
+
+        for (let i = 0; i < maxRetries; i++) {
+
+            try {
+
+                const response = await fetch(TTS_URL, {
+
+                    method: 'POST',
+
+                    headers: { 'Content-Type': 'application/json' },
+
+                    body: JSON.stringify(payload)
+
+                });
+
+                
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                const result = await response.json();
+
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+
+                const audioData = part?.inlineData?.data;
+
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+
+                    if (!sampleRateMatch) throw new Error("Sample rate not found in mimeType.");
+
+                    
+
+                    const sampleRate = parseInt(sampleRateMatch[1], 10);
+
+                    const pcmData = base64ToArrayBuffer(audioData);
+
+                    const pcm16 = new Int16Array(pcmData);
+
+                    
+
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+
+                    const audioUrl = URL.createObjectURL(wavBlob);
+
+                    
+
+                    const audio = new Audio(audioUrl);
+
+                    audio.play();
+
+                    return; // 성공적으로 재생했으므로 루프 종료
+
+                } else {
+
+                    throw new Error("TTS 응답에서 유효한 오디오 데이터를 찾을 수 없습니다.");
+
+                }
+
+            } catch (error) {
+
+                console.error(`TTS API 호출 실패 (시도 ${i + 1}):`, error);
+
+                if (i < maxRetries - 1) {
+
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000)); // Exponential backoff
+
+                } else {
+
+                    statusMessage.textContent = '음성 재생에 실패했습니다. (콘솔 확인)';
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /**
+
+     * Gemini API를 호출하여 구조화된 퀴즈 콘텐츠를 생성합니다.
+
+     */
+
+    async function generateQuizContent(topic) {
+
+        // 시스템 프롬프트를 자동차 산업 역사 전문가로 변경
+
+        const systemPrompt = "당신은 자동차 산업 역사 교육 콘텐츠를 생성하는 AI 전문가입니다. 사용자가 요청한 주제에 기반하여 4지선다형 객관식 퀴즈를 생성하세요. 답변은 반드시 제공된 JSON 스키마를 따라야 합니다.";
+
+        // 퀴즈 요청 내용에 '자동차 역사'를 추가하여 명확하게 컨텍스트를 지정
+
+        const userQuery = `${topic}에 대한 자동차 역사 객관식 퀴즈 5개를 생성해 주세요. 각 퀴즈는 4개의 옵션과 정답, 그리고 간결한 해설을 포함해야 합니다.`;
+
+        
+
+        const responseSchema = {
+
+            type: "ARRAY",
+
+            items: {
+
+                type: "OBJECT",
+
+                properties: {
+
+                    question: { "type": "STRING", description: "퀴즈 질문입니다." },
+
+                    options: { "type": "ARRAY", items: { "type": "STRING" }, description: "4개의 보기 항목입니다." },
+
+                    correctAnswer: { "type": "STRING", description: "정답 보기의 텍스트입니다." },
+
+                    explanation: { "type": "STRING", description: "정답에 대한 간결한 해설입니다." }
+
+                },
+
+                required: ["question", "options", "correctAnswer", "explanation"]
+
+            }
+
+        };
+
+        const payload = {
+
+            contents: [{ parts: [{ text: userQuery }] }],
+
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+
+            generationConfig: {
+
+                responseMimeType: "application/json",
+
+                responseSchema: responseSchema,
+
+                // Google Search grounding을 사용하여 최신 정보를 바탕으로 퀴즈를 생성합니다.
+
+                tools: [{ "google_search": {} }],
+
+            },
+
+        };
+
+        const maxRetries = 3;
+
+        for (let i = 0; i < maxRetries; i++) {
+
+            try {
+
+                const response = await fetch(API_URL, {
+
+                    method: 'POST',
+
+                    headers: { 'Content-Type': 'application/json' },
+
+                    body: JSON.stringify(payload)
+
+                });
+
+                
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                const result = await response.json();
+
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                
+
+                if (jsonText) {
+
+                    // LLM은 JSON을 문자열로 반환하므로 파싱합니다.
+
+                    const parsedData = JSON.parse(jsonText);
+
+                    return parsedData;
+
+                } else {
+
+                    throw new Error("AI로부터 유효한 퀴즈 데이터를 받지 못했습니다.");
+
+                }
+
+            } catch (error) {
+
+                console.error(`API 호출 실패 (시도 ${i + 1}):`, error);
+
+                if (i < maxRetries - 1) {
+
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000)); // Exponential backoff
+
+                } else {
+
+                    throw new Error("퀴즈 생성 API 호출 중 최종 오류 발생.");
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /**
+
+     * UI 업데이트 및 다음 문제로 넘어가는 함수
+
+     */
+
+    function loadQuestion() {
+
+        if (currentQuestionIndex >= currentQuiz.length) {
+
+            // 모든 퀴즈 완료
+
+            showEndGame();
+
+            return;
+
+        }
+
+        const q = currentQuiz[currentQuestionIndex];
+
+        currentQuestionEl.textContent = `${currentQuestionIndex + 1}. ${q.question}`;
+
+        questionCountDisplay.textContent = `문제: ${currentQuestionIndex + 1} / ${currentQuiz.length}`;
+
+        optionsContainer.innerHTML = ''; // 옵션 초기화
+
+        feedbackMessage.classList.add('hidden');
+
+        feedbackMessage.textContent = '';
+
+        
+
+        // 질문을 음성으로 읽어줍니다.
+
+        speak(q.question);
+
+        // 옵션 버튼 생성
+
+        q.options.forEach(option => {
+
+            const button = document.createElement('button');
+
+            button.textContent = option;
+
+            // Game Boy 스타일 옵션 버튼: 다크 그레이 배경, 3D 섀도우
+
+            button.className = 'w-full py-3 px-4 text-left bg-[#555555] hover:bg-[#777777] text-white font-bold rounded-lg transition duration-100 gameboy-button-shadow-gray transform active:translate-y-1 active:shadow-none disabled:opacity-50 text-xs';
+
+            button.onclick = () => handleAnswer(option);
+
+            optionsContainer.appendChild(button);
+
+        });
+
+    }
+
+    /**
+
+     * 답변을 처리하고 피드백을 표시하는 함수
+
+     */
+
+    function handleAnswer(selectedOption) {
+
+        if (isProcessing) return;
+
+        isProcessing = true;
+
+        const currentQ = currentQuiz[currentQuestionIndex];
+
+        const isCorrect = selectedOption === currentQ.correctAnswer;
+
+        const optionButtons = optionsContainer.querySelectorAll('button');
+
+        // 모든 버튼 비활성화
+
+        optionButtons.forEach(btn => btn.disabled = true);
+
+        // 피드백 메시지 설정 및 애니메이션
+
+        feedbackMessage.classList.remove('hidden', 'bg-red-700', 'bg-green-700');
+
+        
+
+        let feedbackText = '';
+
+        if (isCorrect) {
+
+            score++;
+
+            feedbackMessage.classList.add('bg-green-700');
+
+            feedbackText = `정답입니다! 🎉 ${currentQ.explanation}`;
+
+            speak("정답입니다!");
+
+        } else {
+
+            feedbackMessage.classList.add('bg-red-700');
+
+            // 오답 버튼 표시 (빨간색으로 하이라이트)
+
+            const wrongButton = Array.from(optionButtons).find(btn => btn.textContent === selectedOption);
+
+            if (wrongButton) {
+
+                // 기존 Game Boy 스타일 제거
+
+                wrongButton.classList.remove('bg-[#555555]', 'hover:bg-[#777777]', 'gameboy-button-shadow-gray', 'active:translate-y-1', 'active:shadow-none');
+
+                // 오류 스타일 적용
+
+                wrongButton.classList.add('bg-red-600', 'shadow-[0_4px_0_0_#A00000]');
+
+            }
+
+            
+
+            // 정답 버튼 표시 (녹색으로 하이라이트)
+
+            const correctButton = Array.from(optionButtons).find(btn => btn.textContent === currentQ.correctAnswer);
+
+            if (correctButton) {
+
+                // 기존 Game Boy 스타일 제거
+
+                correctButton.classList.remove('bg-[#555555]', 'hover:bg-[#777777]', 'gameboy-button-shadow-gray', 'active:translate-y-1', 'active:shadow-none');
+
+                // 정답 스타일 적용
+
+                correctButton.classList.add('bg-green-600', 'shadow-[0_4px_0_0_#1e4620]');
+
+            }
+
+            feedbackText = `오답입니다. 😭 정답: ${currentQ.correctAnswer}. 해설: ${currentQ.explanation}`;
+
+            speak("오답입니다. 다시 도전하세요!");
+
+        }
+
+        
+
+        feedbackMessage.innerHTML = `<span class="block mb-1 font-bold">${isCorrect ? '정답!' : '오답!'}</span> ${feedbackText}`;
+
+        scoreDisplay.textContent = `점수: ${score}`;
+
+        // 잠시 후 다음 문제 로드
+
+        setTimeout(() => {
+
+            currentQuestionIndex++;
+
+            loadQuestion();
+
+            isProcessing = false;
+
+        }, 4000); // 4초 후에 다음 문제로 넘어감 (해설 읽을 시간)
+
+    }
+
+    /**
+
+     * 게임 종료 화면을 표시하는 함수
+
+     */
+
+    function showEndGame() {
+
+        const totalQuestions = currentQuiz.length;
+
+        const finalMessage = `퀴즈 완료! 당신의 점수는 ${score} / ${totalQuestions} 점입니다.`;
+
+        
+
+        quizGameArea.classList.add('hidden');
+
+        quizGenerationArea.classList.remove('hidden');
+
+        
+
+        statusMessage.classList.remove('text-red-500', 'text-green-500');
+
+        statusMessage.classList.add(score / totalQuestions > 0.6 ? 'text-green-700' : 'text-red-600');
+
+        statusMessage.innerHTML = `<span class="font-bold text-sm block">${finalMessage}</span> <span class="text-xs">새로운 주제로 퀴즈를 만들어보세요!</span>`;
+
+        // 상태 초기화
+
+        currentQuiz = [];
+
+        currentQuestionIndex = 0;
+
+        score = 0;
+
+        topicInput.value = '';
+
+        speak(finalMessage);
+
+    }
+
+    /**
+
+     * 메인 퀴즈 생성 버튼 이벤트 핸들러
+
+     */
+
+    generateButton.addEventListener('click', async () => {
+
+        if (isProcessing) return;
+
+        
+
+        const topic = topicInput.value.trim();
+
+        if (!topic) {
+
+            statusMessage.textContent = '퀴즈 주제를 입력해 주세요!';
+
+            statusMessage.classList.add('text-red-600');
+
+            return;
+
+        }
+
+        isProcessing = true;
+
+        generateButton.disabled = true;
+
+        statusMessage.textContent = `"${topic}"에 대한 퀴즈를 AI가 생성 중입니다... 잠시만 기다려 주세요.`;
+
+        statusMessage.classList.remove('text-red-600', 'text-green-700');
+
+        
+
+        quizGameArea.classList.add('hidden');
+
+        try {
+
+            const quizData = await generateQuizContent(topic);
+
+            
+
+            if (quizData && quizData.length > 0) {
+
+                currentQuiz = quizData;
+
+                currentQuestionIndex = 0;
+
+                score = 0;
+
+                
+
+                quizGenerationArea.classList.add('hidden');
+
+                quizGameArea.classList.remove('hidden');
+
+                
+
+                statusMessage.textContent = '퀴즈가 생성되었습니다! 지금부터 게임을 시작합니다.';
+
+                statusMessage.classList.add('text-green-700');
+
+                loadQuestion();
+
+            } else {
+
+                statusMessage.textContent = '퀴즈를 생성하지 못했습니다. 주제를 명확하게 다시 입력해 보세요.';
+
+                statusMessage.classList.add('text-red-600');
+
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            statusMessage.textContent = `퀴즈 생성 중 오류가 발생했습니다: ${error.message}.`;
+
+            statusMessage.classList.add('text-red-600');
+
+        } finally {
+
+            isProcessing = false;
+
+            generateButton.disabled = false;
+
+            setTimeout(() => statusMessage.textContent = '', 5000); // 5초 후 메시지 숨김
+
+        }
+
+    });
+
+</script>
+
   </body>
+
 </html>
