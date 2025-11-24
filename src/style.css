@@ -1,406 +1,228 @@
 :root {
-  --primary: #0066ff;
-  --primary-dark: #0052cc;
-  --secondary: #00d4ff;
-  --accent: #7b2cbf;
-  --success: #00ff88;
-  --error: #ff3366;
-  --bg-dark: #0a0e27;
-  --bg-gradient-start: #0f172a;
-  --bg-gradient-end: #1e293b;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --card-border: rgba(255, 255, 255, 0.1);
-  --text-primary: #ffffff;
-  --text-secondary: #94a3b8;
-  --glass: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
+  color-scheme: light;
+  --body-bg: #d3d3d3;
+  --body-text: #222222;
+  --shell-border: #2f2f2f;
+  --screen-bg: #9bbc0f;
+  --screen-text: #0f380f;
+  --danger: #b22222;
+  --danger-shadow: #800000;
+  --neutral-btn: #555555;
+  --neutral-shadow: #333333;
+  --success: #2e7d32;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: 'Noto Sans KR', 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-  color: var(--text-primary);
-  overflow-x: hidden;
-  position: relative;
+  font-family: 'Press Start 2P', monospace;
+  background-color: var(--body-bg);
+  color: var(--body-text);
 }
 
-.container {
+#app {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  position: relative;
-  z-index: 1;
+  padding: 16px;
 }
 
-/* 배경 애니메이션 */
-.background-animation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
+.gameboy-shell {
+  width: min(640px, 100%);
+  background: #d3d3d3;
+  border: 8px solid var(--shell-border);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
 }
 
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--secondary);
-  border-radius: 50%;
-  opacity: 0.6;
-  animation: float 15s infinite ease-in-out;
-  box-shadow: 0 0 10px var(--secondary), 0 0 20px var(--secondary);
-}
-
-.particle:nth-child(1) {
-  left: 10%;
-  animation-delay: 0s;
-  animation-duration: 20s;
-}
-
-.particle:nth-child(2) {
-  left: 30%;
-  animation-delay: -5s;
-  animation-duration: 18s;
-}
-
-.particle:nth-child(3) {
-  left: 50%;
-  animation-delay: -10s;
-  animation-duration: 22s;
-}
-
-.particle:nth-child(4) {
-  left: 70%;
-  animation-delay: -15s;
-  animation-duration: 19s;
-}
-
-.particle:nth-child(5) {
-  left: 90%;
-  animation-delay: -7s;
-  animation-duration: 21s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(100vh) translateX(0) scale(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.6;
-  }
-  90% {
-    opacity: 0.6;
-  }
-  100% {
-    transform: translateY(-100px) translateX(50px) scale(1);
-    opacity: 0;
-  }
-}
-
-/* 폼 래퍼 */
-.form-wrapper {
-  width: 100%;
-  max-width: 600px;
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--card-border);
-  border-radius: 24px;
-  padding: 40px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
-}
-
-/* 헤더 */
-.form-header {
+.console-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
-.header-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-.form-header h1 {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.subtitle {
-  color: var(--text-secondary);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-/* 폼 그룹 */
-.form-group {
-  margin-bottom: 32px;
-}
-
-.form-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  font-weight: 600;
+.console-title {
+  font-size: clamp(14px, 4vw, 20px);
   margin-bottom: 12px;
-  color: var(--text-primary);
 }
 
-.label-icon {
-  font-size: 20px;
+.console-subtitle {
+  font-size: clamp(10px, 3vw, 12px);
+  color: #555555;
+  line-height: 1.6;
 }
 
-.form-input {
-  width: 100%;
-  padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-size: 16px;
-  font-family: inherit;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
-}
-
-.form-input option {
-  background: var(--bg-dark);
-  color: var(--text-primary);
-}
-
-/* 라디오 그룹 */
-.radio-group {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.radio-group.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid var(--glass-border);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  flex: 1;
-  min-width: 120px;
-  position: relative;
-}
-
-.radio-option:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-.radio-option input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.radio-custom {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--glass-border);
-  border-radius: 50%;
-  position: relative;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.radio-option input[type="radio"]:checked + .radio-custom {
-  border-color: var(--primary);
-  background: var(--primary);
-}
-
-.radio-option input[type="radio"]:checked + .radio-custom::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  background: white;
-  border-radius: 50%;
-}
-
-.radio-option input[type="radio"]:checked ~ .radio-label {
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.radio-label {
-  color: var(--text-primary);
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-/* 제출 버튼 */
-.submit-btn {
-  width: 100%;
-  padding: 16px 24px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
-  margin-top: 8px;
-  font-family: inherit;
-}
-
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.5);
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-}
-
-.submit-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-icon {
-  font-size: 20px;
-  transition: transform 0.3s ease;
-}
-
-.submit-btn:hover:not(:disabled) .btn-icon {
-  transform: translateX(4px);
-}
-
-/* 메시지 */
-.message {
-  display: none;
-  margin-top: 20px;
-  padding: 14px 18px;
-  border-radius: 12px;
+.status-message {
+  min-height: 20px;
+  margin: 10px 0 0;
   text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  transition: opacity 0.3s ease;
-  animation: slideIn 0.3s ease;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.status-message.error {
+  color: var(--danger);
 }
 
-.message.success {
-  background: rgba(0, 255, 136, 0.2);
-  border: 1px solid rgba(0, 255, 136, 0.4);
+.status-message.success {
   color: var(--success);
 }
 
-.message.error {
-  background: rgba(255, 51, 102, 0.2);
-  border: 1px solid rgba(255, 51, 102, 0.4);
-  color: var(--error);
+.console-panel {
+  margin-top: 24px;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .form-wrapper {
-    padding: 30px 20px;
-  }
-
-  .form-header h1 {
-    font-size: 28px;
-  }
-
-  .radio-group.grid {
-    grid-template-columns: 1fr;
-  }
-
-  .radio-group {
-    flex-direction: column;
-  }
-
-  .radio-option {
-    width: 100%;
-  }
+.hidden {
+  display: none !important;
 }
 
-@media (max-width: 480px) {
-  .header-icon {
-    font-size: 48px;
+.screen {
+  background: var(--screen-bg);
+  color: var(--screen-text);
+  border: 3px solid var(--screen-text);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25);
+}
+
+.screen p {
+  font-size: clamp(10px, 3vw, 12px);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.gb-input {
+  width: 100%;
+  border: 3px solid var(--screen-text);
+  border-radius: 4px;
+  background: var(--screen-bg);
+  color: var(--screen-text);
+  padding: 14px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.gb-input::placeholder {
+  color: rgba(15, 56, 15, 0.7);
+}
+
+.gb-button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 12px;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  background: var(--danger);
+  box-shadow: 0 4px 0 0 var(--danger-shadow);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.gb-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gb-button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 0 var(--danger-shadow);
+}
+
+.hud {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  margin-bottom: 12px;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.option-btn {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  text-align: left;
+  font-size: 10px;
+  font-family: inherit;
+  background: var(--neutral-btn);
+  color: #fff;
+  box-shadow: 0 4px 0 0 var(--neutral-shadow);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 200ms ease;
+}
+
+.option-btn.correct {
+  background: #2e7d32;
+  box-shadow: 0 4px 0 0 #1b5e20;
+}
+
+.option-btn.wrong {
+  background: #b22222;
+  box-shadow: 0 4px 0 0 #800000;
+}
+
+.option-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.option-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 0 var(--neutral-shadow);
+}
+
+.feedback {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 10px;
+  text-align: center;
+  color: #fff;
+}
+
+.feedback.success {
+  background: #2e7d32;
+}
+
+.feedback.error {
+  background: #b22222;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 600px) {
+  .gameboy-shell {
+    padding: 20px;
+    border-width: 6px;
   }
 
-  .form-header h1 {
-    font-size: 24px;
-  }
-
-  .subtitle {
-    font-size: 14px;
+  .gb-button,
+  .option-btn {
+    font-size: 10px;
   }
 }
