@@ -166,7 +166,7 @@
 
 </div>
 
-<script>
+<script type="module">
 
     // Firebase 관련 전역 변수 (Firestore를 사용하지 않으므로 사용하지 않음)
 
@@ -180,15 +180,17 @@
 
     // Gemini API 설정
 
+    const API_KEY = import.meta.env?.VITE_GEMINI_API_KEY ?? '';
+
     const API_MODEL = 'gemini-2.5-flash-preview-09-2025';
 
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=`; // API Key는 환경에서 자동 주입됨
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
 
     // TTS API 설정
 
     const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
 
-    const TTS_URL = `https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=`; // API Key는 환경에서 자동 주입됨
+    const TTS_URL = `https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=${API_KEY}`;
 
     // DOM 요소 캐시
 
@@ -761,6 +763,15 @@
         if (!topic) {
 
             statusMessage.textContent = '퀴즈 주제를 입력해 주세요!';
+
+            statusMessage.classList.add('text-red-600');
+
+            return;
+
+        }
+        if (!API_KEY) {
+
+            statusMessage.textContent = '.env 파일에 VITE_GEMINI_API_KEY를 설정해 주세요.';
 
             statusMessage.classList.add('text-red-600');
 
